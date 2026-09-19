@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import csv
 import json
 import re
@@ -79,7 +80,7 @@ def extract_rendered_results(driver: webdriver.Chrome, query: str, max_total: in
         tables = driver.find_elements(By.CSS_SELECTOR, "table.mb-3.mt-3.fadeIn")
         batch_records = []
         for table in tables:
-            record = parse_result_table(table)
+            record = parse_result_table(driver, table)
             if not record:
                 continue
             key = (record["title"], record["author"], record["year"], record["publication_type"])
@@ -110,12 +111,74 @@ def extract_rendered_results(driver: webdriver.Chrome, query: str, max_total: in
     return collected
 
 
-def parse_result_table(table) -> dict:
+def extract_keywords_from_detail(driver: webdriver.Chrome, detail_url: str):
+    if not detail_url:
+        return []
+
+    original_handle = driver.current_window_handle
+    driver.execute_script("window.open('about:blank', '_blank');")
+    new_handles = [handle for handle in driver.window_handles if handle != original_handle]
+    if not new_handles:
+        return []
+
+    new_handle = new_handles[0]
+    driver.switch_to.window(new_handle)
+    driver.get(detail_url)
+
+    try:
+        WebDriverWait(driver, 20).until(
+            lambda d: any(label in d.find_element(By.TAG_NAME, "body").text for label in [
+                "Palavras-chave",
+                "Keywords",
+                "Palabras clave",
+                "Mots clés",
+            ])
+        )
+    except Exception:
+        pass
+
+    body_text = driver.find_element(By.TAG_NAME, "body").text
+    driver.close()
+    driver.switch_to.window(original_handle)
+
+    labels = ["Palavras-chave:", "Palavras chave:", "Keywords:", "Palabras clave:", "Mots clés:"]
+    for label in labels:
+        label_index = body_text.lower().find(label.lower())
+        if label_index == -1:
+            continue
+
+        start_index = label_index + len(label)
+        remainder = body_text[start_index:]
+        end_indexes = []
+        for next_label in labels:
+            if next_label == label:
+                continue
+            next_index = remainder.lower().find(next_label.lower())
+            if next_index != -1:
+                end_indexes.append(next_index)
+        end_index = min(end_indexes) if end_indexes else len(remainder)
+        raw_keywords = remainder[:end_index]
+        cleaned = re.sub(r"\s+", " ", raw_keywords).strip()
+        if not cleaned:
+            continue
+
+        keywords = [
+            keyword.strip()
+            for keyword in re.split(r"\s+(?=[A-ZÁÉÍÓÚÃÕÂÊÔÇ])", cleaned)
+            if keyword.strip()
+        ]
+        return keywords if keywords else [cleaned]
+
+    return []
+
+
+def parse_result_table(driver: webdriver.Chrome, table) -> dict:
     title_link = table.find_elements(By.CSS_SELECTOR, "a.work")
     if not title_link:
         return {}
 
     title = title_link[0].text.strip()
+    detail_url = title_link[0].get_attribute("href") or ""
 
     author_elements = table.find_elements(By.TAG_NAME, "i")
     author = author_elements[0].text.strip() if author_elements else ""
@@ -130,9 +193,7 @@ def parse_result_table(table) -> dict:
     if type_elements:
         type_value = type_elements[0].text.strip()
 
-    keywords = []
-    # A página de busca do Brapci não expõe as palavras-chave por item no HTML renderizado.
-    # Quando o campo não existe, o export continua consistente com a interface real do site.
+    keywords = extract_keywords_from_detail(driver, detail_url) if driver else []
 
     return {
         "title": title,
@@ -172,11 +233,16 @@ def write_outputs(records: list[dict], query: str):
 
 
 def main() -> int:
-    query = "ciência da informação"
+    parser = argparse.ArgumentParser(description="Coleta resultados do BRAPCI usando Selenium.")
+    parser.add_argument("--query", default="ciência da informação", help="Consulta principal para buscar no BRAPCI.")
+    parser.add_argument("--max-results", type=int, default=20, help="Número máximo de registros para coletar.")
+    args = parser.parse_args()
+
+    query = args.query.strip() or "ciência da informação"
     driver = None
     try:
         driver = build_driver()
-        records = extract_rendered_results(driver, query, max_total=20)
+        records = extract_rendered_results(driver, query, max_total=args.max_results)
 
         print(f"RESULTADOS={len(records)}")
         for index, record in enumerate(records[:10], 1):

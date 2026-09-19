@@ -5,6 +5,31 @@ from pathlib import Path
 from typing import Union
 
 
+def build_boolean_query(term_rows):
+    clauses = []
+    for row in term_rows or []:
+        raw_term = normalize_text(row.get("term", "")) if isinstance(row, dict) else ""
+        raw_operator = normalize_text(row.get("operator", "AND")) if isinstance(row, dict) else "AND"
+        if not raw_term:
+            continue
+        operator = raw_operator.upper()
+        if operator not in {"AND", "OR"}:
+            operator = "AND"
+        clauses.append({"operator": operator, "term": raw_term})
+
+    if not clauses:
+        return ""
+
+    fragments = [f'"{clause["term"]}"' for clause in clauses]
+    if len(fragments) == 1:
+        return fragments[0]
+
+    query = fragments[0]
+    for clause in clauses[1:]:
+        query = f'{query} {clause["operator"]} "{clause["term"]}"'
+    return query
+
+
 def normalize_text(value: str) -> str:
     if value is None:
         return ""

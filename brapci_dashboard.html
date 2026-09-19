@@ -1,118 +1,489 @@
+<html>
 
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>BRAPCI Dashboard</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            margin: 24px;
-            background: #f3f4f6;
-            color: #111827;
-          }
-          h1 {
-            margin-bottom: 8px;
-          }
-          .summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
-          }
-          .card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-          }
-          .label {
-            font-size: 12px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-          }
-          .value {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 8px;
-          }
-          .charts {
-            display: grid;
-            grid-template-columns: 1.3fr 1fr;
-            gap: 20px;
-          }
-          .panel {
-            background: white;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-          }
-          th, td {
-            border-bottom: 1px solid #e5e7eb;
-            padding: 10px 12px;
-            text-align: left;
-            vertical-align: top;
-          }
-          th {
-            background: #e5e7eb;
-          }
-        </style>
-      </head>
-      <body>
-        <h1>BRAPCI — Pipeline de Busca e Índice de Termos</h1>
+<head>
+  <meta charset="utf-8">
+  <title>BRAPCI Dashboard</title>
+  <script>
+    async function startSearch(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const body = new URLSearchParams(formData).toString();
 
-        <div class="summary">
-          <div class="card">
-            <div class="label">Registros coletados</div>
-            <div class="value">8</div>
-          </div>
-          <div class="card">
-            <div class="label">Termos únicos</div>
-            <div class="value">71</div>
-          </div>
-          <div class="card">
-            <div class="label">Termo mais frequente</div>
-            <div class="value">ciencia de la información</div>
-          </div>
-          <div class="card">
-            <div class="label">Frequência máxima</div>
-            <div class="value">6</div>
-          </div>
-        </div>
+      const panel = document.getElementById('statusPanel');
+      const stateEl = document.getElementById('statusState');
+      const textEl = document.getElementById('statusText');
+      const logEl = document.getElementById('statusLog');
+      panel.style.display = 'block';
+      stateEl.textContent = 'queued';
+      textEl.textContent = 'enviando query...';
+      logEl.textContent = 'enviando query...';
 
-        <div class="charts">
-          <div class="panel">
-            <div style="height:500px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="a0e4a7b4-7555-4ea4-8978-3b4f61988065" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("a0e4a7b4-7555-4ea4-8978-3b4f61988065")) {                    Plotly.newPlot(                        "a0e4a7b4-7555-4ea4-8978-3b4f61988065",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eFrequ\u00eancia: %{y}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"rgb(59,130,246)"},"x":["ciencia de la informaci\u00f3n","ciencias de la informaci\u00f3n","ci\u00eancia da informa\u00e7\u00e3o","information science","interdisciplinaridade","interdisciplinariedad","interdisciplinarity","biblioteconomia","cargo de bibliotecario","ci\u00eancia da"],"y":[6,6,6,6,3,3,3,2,2,2],"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05}}},"margin":{"l":50,"r":20,"t":50,"b":120},"title":{"text":"Termos mais frequentes"},"xaxis":{"title":{"text":"Termo"}},"yaxis":{"title":{"text":"Frequ\u00eancia"}},"height":500},                        {"responsive": true}                    )                };            </script>        </div>
-          </div>
-          <div class="panel">
-            <div style="height:400px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="f3c8e586-1353-4ae4-9bf9-badea7bd506e" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("f3c8e586-1353-4ae4-9bf9-badea7bd506e")) {                    Plotly.newPlot(                        "f3c8e586-1353-4ae4-9bf9-badea7bd506e",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eArtigos: %{y}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"rgb(16,185,129)","width":3},"marker":{"size":9},"mode":"lines+markers","x":["1979","2013","2014","2017","2018","2021","2023"],"y":[1,1,1,2,1,1,1],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05}}},"margin":{"l":50,"r":20,"t":50,"b":50},"title":{"text":"Publica\u00e7\u00f5es por ano"},"xaxis":{"title":{"text":"Ano"}},"yaxis":{"title":{"text":"Quantidade"}},"height":400},                        {"responsive": true}                    )                };            </script>        </div>
-          </div>
-        </div>
+      const response = await fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body
+      });
 
-        <h2>Resultados consolidados</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Autor</th>
-              <th>Ano</th>
-              <th>Tipo</th>
-              <th>Palavras-chave</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Traçados e limites da Ciência da Informação</td><td>Lena Vania Ribeiro Pinheiro; José Mauro Matheus Loureiro</td><td>2018</td><td>Artigo</td><td>Ciência da informação; Teoria da ciência da informação; Fundamento da ciência da informação; Interdisciplinaridade; Fundamentos da ciência da informação; Information science; Interdisciplinarity; Ciencia de la información; Interdisciplinariedad; Ciencias de la información</td></tr><tr><td>Resumos das dissertações em Ciência da Informação</td><td>Curso de Mestrado em Ciência da Informação da Ufrj; Curso de Mestrado em Ciência da Informação da (ufrj)</td><td>1979</td><td>Artigo</td><td>Ciência da informação; Information science; Ciencia de la información; Ciencias de la información</td></tr><tr><td>Traçados e limites da Ciência da Informação</td><td>Lena Vania Ribeiro Pinheiro; José Mauro Matheus Loureiro</td><td>2017</td><td>Artigo</td><td>Ciência da informação; Teoria da ciência da informação; Fundamentos da ciência da informação; Interdisciplinaridade; Tendências de; Pensamento; Information science; Interdisciplinarity; Ciencia de la información; Interdisciplinariedad; Ciencias de la información</td></tr><tr><td>O relatório de peter havard-williams e a Ciência da Informação no Brasil</td><td>Gabriela Fernanda Ribeiro Rodrigues; Eliane Braga de Oliveira; Carlos Henrique Juvêncio</td><td>2023</td><td>Trabalho em Evento</td><td>história da ciência da informação; programas de pós-graduação em ciência da informação; peter havard-williams.; Palavras-chave:; História da ciência da informação; Programas de pós-graduação em ciência da informação; Peter havard-williams</td></tr><tr><td>Itinerários filosóficos da Ciência da Informação no Brasil: o pioneirismo do Ibict e a propagação das ideias</td><td>Lena Vania Ribeiro Pinheiro</td><td>2017</td><td>Artigo</td><td>Ciência da informação; Pesquisa teórica na ciência da informação; Filosofia da ciência da informação; Programa de pós-graduação em ciência da informação; Rafael capurro; Pesquisas teóricas na ciência da informação; Programas de pós-graduação em ciência da informação; Information science; Ciencia de la información; Ciencias de la información</td></tr><tr><td>A formação dos docentes em Ciência da Informação no Brasil</td><td>Edcleyton B. F. Silva; Marlene Oliveira</td><td>2021</td><td>Artigo</td><td>formação em ciência da informação. pós-graduação em ciência da informação. ciência da informação no brasil.; Palavras-chave:</td></tr><tr><td>As possibilidades de aproximação e diálogo entre arquivologia, biblioteconomia e museologia via modelo formativo: o caso da ECI/UFMG</td><td>José Alimatéia de Aquino Ramos; Carlos Alberto Àvila de Araújo</td><td>2014</td><td>Artigo</td><td>Ciência da informação; Biblioteconomia; Arquivologia; Museologia; Dialogo; Modelo formativo; Campo integrador; Ciência da informação-diálogo; Ciência da informação-modelo formativo-campo integrador; Abstract:; Apresenta resultados de uma pesquisa que buscou identificar as percepções dos docentes da; Escola de; Ciência da; Informação da; UFMG sobre as possibilidades de aproximação e diálogo via modelo formativo entre os cursos de; Arquivologia,; Biblioteconomia e; Museologia tendo a; Ciência da; Informação como campo integrador.; Os resultados destacam as relações estabelecidas entre a; Ciência da; Informação e estas áreas, bem como a visão dos docentes sobre a ideia de; Ciência da; Informação como base para a formação nestas áreas.; Apresenta a visão dos docentes sobre os pontos convergentes entre as áreas, bem como os pontos que dificultam a integração destas áreas do ponto de vista do modelo formativo.; Arquivologia; Museologia; Biblioteconomia; Ciência da informação-diálogo; Ciência da informação-modelo formativo-campo integrador; Information science; Museology; Archival science; Librarianship; Ciencia de la información; Museología; Ciencia archivística; Cargo de bibliotecario; Ciencias de la información</td></tr><tr><td>A(s) disciplinaridade(s) da Ciência da Informação: aplicação das leis da dialética marxista no contexto pluri, inter e transdisciplinar</td><td>Jonathas Luiz Carvalho Silva</td><td>2013</td><td>Artigo</td><td>Ciência da informação; Filosofia; Dialética; Lel; Categoria; Pluridisciplinaridade; Interdisciplinaridade; Transdisciplinaridade; Biblioteconomia; Leis; Categorias; Dialética-leis-categorias; Abstract:; Discute sobre a construção disciplinar do conhecimento na; Ciência da; Informação a partir da aplicação das leis da dialética marxista.; Apresenta como síntese problematizadora a seguinte pergunta: como é possível aplicar as leis/categorias da dialética marxista à; Ciência da; Informação?; Tem como objetivo uma reflexão sobre a dialética marxista (materialista) e as formas de aplicação das leis da dialética à; Ciência da; Informação.; A metodologia do presente estudo consiste de uma pesquisa de nível exploratório com delineamento bibliográfico.; Concluímos que há possibilidades diversas de aplicação das leis da dialética marxista à; Ciência da; Informação, especialmente no que toca a lei da mudança qualitativa, a lei da ação recíproca e a lei da luta dos contrários.; Porém, essas aplicações se estabelecem não como uma verdade, mas como pressupostos para compreender os significados do caráter disciplinar da; Ciência da; Informação no âmbito de suas transformações epistemológicas.; Biblioteconomia; Ciência da informação; Dialética-leis-categorias; Pluridisciplinaridade; Interdisciplinaridade; Transdisciplinaridade; Information science; Interdisciplinarity; Transdisciplinarity; Librarianship; Ciencia de la información; Interdisciplinariedad; Transdisciplinariedad; Cargo de bibliotecario; Ciencias de la información</td></tr>
-          </tbody>
-        </table>
-      </body>
-    </html>
-    
+      const result = await response.json();
+      const jobId = result.job_id;
+      pollStatus(jobId);
+    }
+
+    async function pollStatus(jobId) {
+      const panel = document.getElementById('statusPanel');
+      const stateEl = document.getElementById('statusState');
+      const textEl = document.getElementById('statusText');
+      const logEl = document.getElementById('statusLog');
+
+      const interval = setInterval(async () => {
+        const response = await fetch('/status?job_id=' + encodeURIComponent(jobId));
+        const data = await response.json();
+
+        stateEl.textContent = data.state || 'unknown';
+        textEl.textContent = data.progress || 'processando...';
+        logEl.textContent = (data.logs || []).join('\\n');
+
+        if (data.state === 'done' || data.state === 'error') {
+          clearInterval(interval);
+          if (data.state === 'done') {
+            window.location.reload();
+          }
+        }
+      }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', startSearch);
+      }
+    });
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .label {
+      font-size: 12px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e5e7eb;
+    }
+
+    .search-box {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 16px 18px 10px;
+      margin-top: 20px;
+      margin-bottom: 24px;
+    }
+
+    .search-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+
+    .term-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 44px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    select,
+    input[type="text"] {
+      height: 42px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 18px;
+      background: #f9fafb;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select {
+      background: #f3f4f6;
+    }
+
+    .remove-term {
+      height: 42px;
+      border: none;
+      border-radius: 8px;
+      background: #dc2626;
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+
+    .add-term {
+      border: 2px solid #facc15;
+      background: transparent;
+      color: #111827;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      background: #2563eb;
+      color: white;
+      border: 2px solid #2563eb;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .strategy-box {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .strategy-box label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    .strategy-box input {
+      width: 100%;
+      border: none;
+      font-size: 18px;
+      background: transparent;
+      color: #111827;
+    }
+
+    .status-panel {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .status-log {
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      white-space: pre-wrap;
+      min-height: 48px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>BRAPCI — Pipeline de Busca e Índice de Termos</h1>
+
+  <div class="search-box">
+    <h2 class="search-title">Formulário de Termos Booleanos</h2>
+    <form method="post" action="/">
+      <div class="term-row">
+        <select name="op_0">
+          <option>AND</option>
+          <option>OR</option>
+        </select>
+        <input type="text" name="term_0" value="ciência da informação">
+        <button class="remove-term" type="button" aria-label="Remover termo">×</button>
+      </div>
+      <div class="term-row">
+        <select name="op_1">
+          <option>AND</option>
+          <option>OR</option>
+        </select>
+        <input type="text" name="term_1" value="epistemologia">
+        <button class="remove-term" type="button" aria-label="Remover termo">×</button>
+      </div>
+      <div class="term-row">
+        <select name="op_2">
+          <option>OR</option>
+          <option>AND</option>
+        </select>
+        <input type="text" name="term_2" value="conceito">
+        <button class="remove-term" type="button" aria-label="Remover termo">×</button>
+      </div>
+      <div class="term-row">
+        <select name="op_3">
+          <option>OR</option>
+          <option>AND</option>
+        </select>
+        <input type="text" name="term_3" value="interdisciplinaridade">
+        <button class="remove-term" type="button" aria-label="Remover termo">×</button>
+      </div>
+
+      <div class="actions">
+        <button class="add-term" type="button">Adicionar Termo</button>
+        <button class="submit-btn" type="submit">Pesquisar</button>
+      </div>
+
+      <div class="strategy-box">
+        <label>Estratégia de Busca</label>
+        <input type="text" name="strategy_query"
+          value="&quot;ciência da informação&quot; AND &quot;epistemologia&quot; OR &quot;conceito&quot; OR &quot;interdisciplinaridade&quot;">
+      </div>
+    </form>
+  </div>
+
+  <div class="status-panel" id="statusPanel">
+    <div class="status-header">
+      <span>Pipeline em execução</span>
+      <span class="status-pill" id="statusState">queued</span>
+    </div>
+    <div id="statusText">aguardando...</div>
+    <div class="status-log" id="statusLog">iniciando...
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="card">
+      <div class="label">Registros coletados</div>
+      <div class="value">8</div>
+    </div>
+    <div class="card">
+      <div class="label">Termos únicos</div>
+      <div class="value">71</div>
+    </div>
+    <div class="card">
+      <div class="label">Termo mais frequente</div>
+      <div class="value">ciencia de la información</div>
+    </div>
+    <div class="card">
+      <div class="label">Frequência máxima</div>
+      <div class="value">6</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="panel">
+      <div style="height:500px; width:100%;">
+        <script>window.PlotlyConfig = { MathJaxConfig: 'local' };</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js"
+          integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>
+        <div id="8842b620-7762-433d-8c3c-ac0abb276db7" class="plotly-graph-div" style="height:100%; width:100%;"></div>
+        <script>                window.PLOTLYENV = window.PLOTLYENV || {}; if (document.getElementById("8842b620-7762-433d-8c3c-ac0abb276db7")) { Plotly.newPlot("8842b620-7762-433d-8c3c-ac0abb276db7", [{ "hovertemplate": "\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eFrequ\u00eancia: %{y}\u003cextra\u003e\u003c\u002fextra\u003e", "marker": { "color": "rgb(59,130,246)" }, "x": ["ciencia de la informaci\u00f3n", "ciencias de la informaci\u00f3n", "ci\u00eancia da informa\u00e7\u00e3o", "information science", "interdisciplinaridade", "interdisciplinariedad", "interdisciplinarity", "biblioteconomia", "cargo de bibliotecario", "ci\u00eancia da"], "y": [6, 6, 6, 6, 3, 3, 3, 2, 2, 2], "type": "bar" }], { "template": { "data": { "histogram2dcontour": [{ "type": "histogram2dcontour", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "choropleth": [{ "type": "choropleth", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "histogram2d": [{ "type": "histogram2d", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "heatmap": [{ "type": "heatmap", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "contourcarpet": [{ "type": "contourcarpet", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "contour": [{ "type": "contour", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "surface": [{ "type": "surface", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "mesh3d": [{ "type": "mesh3d", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "scatter": [{ "fillpattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 }, "type": "scatter" }], "parcoords": [{ "type": "parcoords", "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterpolargl": [{ "type": "scatterpolargl", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "bar": [{ "error_x": { "color": "#2a3f5f" }, "error_y": { "color": "#2a3f5f" }, "marker": { "line": { "color": "#E5ECF6", "width": 0.5 }, "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "bar" }], "scattergeo": [{ "type": "scattergeo", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterpolar": [{ "type": "scatterpolar", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "histogram": [{ "marker": { "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "histogram" }], "scattergl": [{ "type": "scattergl", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatter3d": [{ "type": "scatter3d", "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scattermap": [{ "type": "scattermap", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterternary": [{ "type": "scatterternary", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scattercarpet": [{ "type": "scattercarpet", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "carpet": [{ "aaxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "baxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "type": "carpet" }], "table": [{ "cells": { "fill": { "color": "#EBF0F8" }, "line": { "color": "white" } }, "header": { "fill": { "color": "#C8D4E3" }, "line": { "color": "white" } }, "type": "table" }], "barpolar": [{ "marker": { "line": { "color": "#E5ECF6", "width": 0.5 }, "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "barpolar" }], "pie": [{ "automargin": true, "type": "pie" }] }, "layout": { "autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": { "color": "#2a3f5f" }, "hovermode": "closest", "hoverlabel": { "align": "left" }, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": { "bgcolor": "#E5ECF6", "angularaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "radialaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "ternary": { "bgcolor": "#E5ECF6", "aaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "baxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "caxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "coloraxis": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "colorscale": { "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]] }, "xaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2 }, "yaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2 }, "scene": { "xaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 }, "yaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 }, "zaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 } }, "shapedefaults": { "line": { "color": "#2a3f5f" } }, "annotationdefaults": { "arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1 }, "geo": { "bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white" }, "title": { "x": 0.05 } } }, "margin": { "l": 50, "r": 20, "t": 50, "b": 120 }, "title": { "text": "Termos mais frequentes" }, "xaxis": { "title": { "text": "Termo" } }, "yaxis": { "title": { "text": "Frequ\u00eancia" } }, "height": 500 }, { "responsive": true }) };            </script>
+      </div>
+    </div>
+    <div class="panel">
+      <div style="height:400px; width:100%;">
+        <script>window.PlotlyConfig = { MathJaxConfig: 'local' };</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js"
+          integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>
+        <div id="83bb3f32-47ea-48b7-bb36-765a5365baaf" class="plotly-graph-div" style="height:100%; width:100%;"></div>
+        <script>                window.PLOTLYENV = window.PLOTLYENV || {}; if (document.getElementById("83bb3f32-47ea-48b7-bb36-765a5365baaf")) { Plotly.newPlot("83bb3f32-47ea-48b7-bb36-765a5365baaf", [{ "hovertemplate": "\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eArtigos: %{y}\u003cextra\u003e\u003c\u002fextra\u003e", "line": { "color": "rgb(16,185,129)", "width": 3 }, "marker": { "size": 9 }, "mode": "lines+markers", "x": ["1979", "2013", "2014", "2017", "2018", "2021", "2023"], "y": [1, 1, 1, 2, 1, 1, 1], "type": "scatter" }], { "template": { "data": { "histogram2dcontour": [{ "type": "histogram2dcontour", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "choropleth": [{ "type": "choropleth", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "histogram2d": [{ "type": "histogram2d", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "heatmap": [{ "type": "heatmap", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "contourcarpet": [{ "type": "contourcarpet", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "contour": [{ "type": "contour", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "surface": [{ "type": "surface", "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }], "mesh3d": [{ "type": "mesh3d", "colorbar": { "outlinewidth": 0, "ticks": "" } }], "scatter": [{ "fillpattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 }, "type": "scatter" }], "parcoords": [{ "type": "parcoords", "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterpolargl": [{ "type": "scatterpolargl", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "bar": [{ "error_x": { "color": "#2a3f5f" }, "error_y": { "color": "#2a3f5f" }, "marker": { "line": { "color": "#E5ECF6", "width": 0.5 }, "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "bar" }], "scattergeo": [{ "type": "scattergeo", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterpolar": [{ "type": "scatterpolar", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "histogram": [{ "marker": { "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "histogram" }], "scattergl": [{ "type": "scattergl", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatter3d": [{ "type": "scatter3d", "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scattermap": [{ "type": "scattermap", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scatterternary": [{ "type": "scatterternary", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "scattercarpet": [{ "type": "scattercarpet", "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } } }], "carpet": [{ "aaxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "baxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "type": "carpet" }], "table": [{ "cells": { "fill": { "color": "#EBF0F8" }, "line": { "color": "white" } }, "header": { "fill": { "color": "#C8D4E3" }, "line": { "color": "white" } }, "type": "table" }], "barpolar": [{ "marker": { "line": { "color": "#E5ECF6", "width": 0.5 }, "pattern": { "fillmode": "overlay", "size": 10, "solidity": 0.2 } }, "type": "barpolar" }], "pie": [{ "automargin": true, "type": "pie" }] }, "layout": { "autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": { "color": "#2a3f5f" }, "hovermode": "closest", "hoverlabel": { "align": "left" }, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": { "bgcolor": "#E5ECF6", "angularaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "radialaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "ternary": { "bgcolor": "#E5ECF6", "aaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "baxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "caxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "coloraxis": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "colorscale": { "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]] }, "xaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2 }, "yaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2 }, "scene": { "xaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 }, "yaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 }, "zaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2 } }, "shapedefaults": { "line": { "color": "#2a3f5f" } }, "annotationdefaults": { "arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1 }, "geo": { "bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white" }, "title": { "x": 0.05 } } }, "margin": { "l": 50, "r": 20, "t": 50, "b": 50 }, "title": { "text": "Publica\u00e7\u00f5es por ano" }, "xaxis": { "title": { "text": "Ano" } }, "yaxis": { "title": { "text": "Quantidade" } }, "height": 400 }, { "responsive": true }) };            </script>
+      </div>
+    </div>
+  </div>
+
+  <h2>Resultados consolidados</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Ano</th>
+        <th>Tipo</th>
+        <th>Palavras-chave</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Traçados e limites da Ciência da Informação</td>
+        <td>Lena Vania Ribeiro Pinheiro; José Mauro Matheus Loureiro</td>
+        <td>2018</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Teoria da ciência da informação; Fundamento da ciência da informação;
+          Interdisciplinaridade; Fundamentos da ciência da informação; Information science; Interdisciplinarity; Ciencia
+          de la información; Interdisciplinariedad; Ciencias de la información</td>
+      </tr>
+      <tr>
+        <td>Resumos das dissertações em Ciência da Informação</td>
+        <td>Curso de Mestrado em Ciência da Informação da Ufrj; Curso de Mestrado em Ciência da Informação da (ufrj)
+        </td>
+        <td>1979</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Information science; Ciencia de la información; Ciencias de la información</td>
+      </tr>
+      <tr>
+        <td>Traçados e limites da Ciência da Informação</td>
+        <td>Lena Vania Ribeiro Pinheiro; José Mauro Matheus Loureiro</td>
+        <td>2017</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Teoria da ciência da informação; Fundamentos da ciência da informação;
+          Interdisciplinaridade; Tendências de; Pensamento; Information science; Interdisciplinarity; Ciencia de la
+          información; Interdisciplinariedad; Ciencias de la información</td>
+      </tr>
+      <tr>
+        <td>O relatório de peter havard-williams e a Ciência da Informação no Brasil</td>
+        <td>Gabriela Fernanda Ribeiro Rodrigues; Eliane Braga de Oliveira; Carlos Henrique Juvêncio</td>
+        <td>2023</td>
+        <td>Trabalho em Evento</td>
+        <td>história da ciência da informação; programas de pós-graduação em ciência da informação; peter
+          havard-williams.; Palavras-chave:; História da ciência da informação; Programas de pós-graduação em ciência da
+          informação; Peter havard-williams</td>
+      </tr>
+      <tr>
+        <td>Itinerários filosóficos da Ciência da Informação no Brasil: o pioneirismo do Ibict e a propagação das ideias
+        </td>
+        <td>Lena Vania Ribeiro Pinheiro</td>
+        <td>2017</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Pesquisa teórica na ciência da informação; Filosofia da ciência da informação;
+          Programa de pós-graduação em ciência da informação; Rafael capurro; Pesquisas teóricas na ciência da
+          informação; Programas de pós-graduação em ciência da informação; Information science; Ciencia de la
+          información; Ciencias de la información</td>
+      </tr>
+      <tr>
+        <td>A formação dos docentes em Ciência da Informação no Brasil</td>
+        <td>Edcleyton B. F. Silva; Marlene Oliveira</td>
+        <td>2021</td>
+        <td>Artigo</td>
+        <td>formação em ciência da informação. pós-graduação em ciência da informação. ciência da informação no brasil.;
+          Palavras-chave:</td>
+      </tr>
+      <tr>
+        <td>As possibilidades de aproximação e diálogo entre arquivologia, biblioteconomia e museologia via modelo
+          formativo: o caso da ECI/UFMG</td>
+        <td>José Alimatéia de Aquino Ramos; Carlos Alberto Àvila de Araújo</td>
+        <td>2014</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Biblioteconomia; Arquivologia; Museologia; Dialogo; Modelo formativo; Campo
+          integrador; Ciência da informação-diálogo; Ciência da informação-modelo formativo-campo integrador; Abstract:;
+          Apresenta resultados de uma pesquisa que buscou identificar as percepções dos docentes da; Escola de; Ciência
+          da; Informação da; UFMG sobre as possibilidades de aproximação e diálogo via modelo formativo entre os cursos
+          de; Arquivologia,; Biblioteconomia e; Museologia tendo a; Ciência da; Informação como campo integrador.; Os
+          resultados destacam as relações estabelecidas entre a; Ciência da; Informação e estas áreas, bem como a visão
+          dos docentes sobre a ideia de; Ciência da; Informação como base para a formação nestas áreas.; Apresenta a
+          visão dos docentes sobre os pontos convergentes entre as áreas, bem como os pontos que dificultam a integração
+          destas áreas do ponto de vista do modelo formativo.; Arquivologia; Museologia; Biblioteconomia; Ciência da
+          informação-diálogo; Ciência da informação-modelo formativo-campo integrador; Information science; Museology;
+          Archival science; Librarianship; Ciencia de la información; Museología; Ciencia archivística; Cargo de
+          bibliotecario; Ciencias de la información</td>
+      </tr>
+      <tr>
+        <td>A(s) disciplinaridade(s) da Ciência da Informação: aplicação das leis da dialética marxista no contexto
+          pluri, inter e transdisciplinar</td>
+        <td>Jonathas Luiz Carvalho Silva</td>
+        <td>2013</td>
+        <td>Artigo</td>
+        <td>Ciência da informação; Filosofia; Dialética; Lel; Categoria; Pluridisciplinaridade; Interdisciplinaridade;
+          Transdisciplinaridade; Biblioteconomia; Leis; Categorias; Dialética-leis-categorias; Abstract:; Discute sobre
+          a construção disciplinar do conhecimento na; Ciência da; Informação a partir da aplicação das leis da
+          dialética marxista.; Apresenta como síntese problematizadora a seguinte pergunta: como é possível aplicar as
+          leis/categorias da dialética marxista à; Ciência da; Informação?; Tem como objetivo uma reflexão sobre a
+          dialética marxista (materialista) e as formas de aplicação das leis da dialética à; Ciência da; Informação.; A
+          metodologia do presente estudo consiste de uma pesquisa de nível exploratório com delineamento bibliográfico.;
+          Concluímos que há possibilidades diversas de aplicação das leis da dialética marxista à; Ciência da;
+          Informação, especialmente no que toca a lei da mudança qualitativa, a lei da ação recíproca e a lei da luta
+          dos contrários.; Porém, essas aplicações se estabelecem não como uma verdade, mas como pressupostos para
+          compreender os significados do caráter disciplinar da; Ciência da; Informação no âmbito de suas transformações
+          epistemológicas.; Biblioteconomia; Ciência da informação; Dialética-leis-categorias; Pluridisciplinaridade;
+          Interdisciplinaridade; Transdisciplinaridade; Information science; Interdisciplinarity; Transdisciplinarity;
+          Librarianship; Ciencia de la información; Interdisciplinariedad; Transdisciplinariedad; Cargo de
+          bibliotecario; Ciencias de la información</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>

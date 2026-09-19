@@ -1,7 +1,19 @@
 import json
 from pathlib import Path
 
-from brapci_pipeline import build_term_index, normalize_keywords, summarize_by_year
+from brapci_pipeline import build_boolean_query, build_term_index, normalize_keywords, summarize_by_year
+
+
+def test_build_boolean_query_combines_terms_with_operators():
+    rows = [
+        {"term": "ciência da informação", "operator": "AND"},
+        {"term": "epistemologia", "operator": "AND"},
+        {"term": "conceito", "operator": "OR"},
+    ]
+
+    query = build_boolean_query(rows)
+
+    assert '"ciência da informação" AND "epistemologia" OR "conceito"' in query
 
 
 def test_normalize_keywords_removes_noise_and_duplicates():
