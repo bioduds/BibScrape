@@ -1,4 +1,9 @@
 # BibScrape
+ 
+## Autores
+
+- Mr Jones
+- Dudu Nobre
 
 Projeto para automação de busca, extração de metadados e visualização analítica de resultados do portal BRAPCI.
 
